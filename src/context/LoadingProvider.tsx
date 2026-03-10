@@ -24,7 +24,10 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     setIsLoading,
     setLoading,
   };
-  useEffect(() => {}, [loading]);
+  // Trigger re-render when loading changes
+  useEffect(() => {
+    // This effect intentionally left empty to trigger re-renders on loading change
+  }, [loading]);
 
   return (
     <LoadingContext.Provider value={value as LoadingType}>
