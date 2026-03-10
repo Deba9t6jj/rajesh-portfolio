@@ -16,6 +16,12 @@ const setCharacter = (
   const loadCharacter = () => {
     return new Promise<GLTF | null>(async (resolve, reject) => {
       try {
+        // Set a timeout for loading to prevent build cancellation
+        const loadTimeout = setTimeout(() => {
+          console.warn("Character loading timeout - assets may not be available");
+          resolve(null);
+        }, 5000);
+
         const encryptedBlob = await decryptFile(
           "/models/character.enc?v=2",
           "MyCharacter12"
@@ -26,6 +32,7 @@ const setCharacter = (
         loader.load(
           blobUrl,
           async (gltf) => {
+            clearTimeout(loadTimeout);
             character = gltf.scene;
             await renderer.compileAsync(character, camera, scene);
             character.traverse((child: any) => {
@@ -62,13 +69,14 @@ const setCharacter = (
           },
           undefined,
           (error) => {
+            clearTimeout(loadTimeout);
             console.error("Error loading GLTF model:", error);
             reject(error);
           }
         );
       } catch (err) {
-        reject(err);
-        console.error(err);
+        console.error("Character load error:", err);
+        resolve(null);
       }
     });
   };

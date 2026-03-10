@@ -20,8 +20,10 @@ const Scene = () => {
   const { setLoading } = useLoading();
 
   const [character, setChar] = useState<THREE.Object3D | null>(null);
+  
   useEffect(() => {
-    if (canvasDiv.current) {
+    try {
+      if (canvasDiv.current) {
       let rect = canvasDiv.current.getBoundingClientRect();
       let container = { width: rect.width, height: rect.height };
       const aspect = container.width / container.height;
@@ -72,7 +74,19 @@ const Scene = () => {
           window.addEventListener("resize", () =>
             handleResize(renderer, camera, canvasDiv, character)
           );
+        } else {
+          // Asset not available, mark loading complete
+          console.warn("Character model not loaded - proceeding without 3D model");
+          progress.loaded().then(() => {
+            setTimeout(() => {
+              light.turnOnLights();
+            }, 500);
+          });
         }
+      }).catch((error) => {
+        console.error("Failed to load character:", error);
+        progress.clear();
+        setLoading(100);
       });
 
       let mouse = { x: 0, y: 0 },
@@ -142,6 +156,9 @@ const Scene = () => {
           landingDiv.removeEventListener("touchend", onTouchEnd);
         }
       };
+    } catch (error) {
+      console.error("Scene initialization error:", error);
+      setLoading(100);
     }
   }, [setLoading]);
 
