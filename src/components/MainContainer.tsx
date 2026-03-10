@@ -9,10 +9,11 @@ import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import Character from "./Character";
 
 const TechStack = lazy(() => import("./TechStack"));
 
-const MainContainer = ({ children }: PropsWithChildren) => {
+const MainContainer = () => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
     window.innerWidth > 1024
   );
@@ -34,11 +35,11 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {isDesktopView && children}
+      {isDesktopView && <Character />}
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div className="container-main">
-            <Landing>{!isDesktopView && children}</Landing>
+            <Landing>{!isDesktopView && <Character />}</Landing>
             <About />
             <WhatIDo />
             <Career />

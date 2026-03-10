@@ -127,6 +127,7 @@ const Scene = () => {
       };
       animate();
       return () => {
+        document.removeEventListener("mousemove", onMouseMove);
         clearTimeout(debounce);
         scene.clear();
         renderer.dispose();
@@ -137,13 +138,12 @@ const Scene = () => {
           canvasDiv.current.removeChild(renderer.domElement);
         }
         if (landingDiv) {
-          document.removeEventListener("mousemove", onMouseMove);
           landingDiv.removeEventListener("touchstart", onTouchStart);
           landingDiv.removeEventListener("touchend", onTouchEnd);
         }
       };
     }
-  }, []);
+  }, [setLoading]);
 
   return (
     <>
