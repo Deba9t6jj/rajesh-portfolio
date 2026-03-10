@@ -4,7 +4,12 @@ import { smoother } from "../Navbar";
 
 export function initialFX() {
   document.body.style.overflowY = "auto";
-  smoother.paused(false);
+  
+  // Safely check if smoother is defined before using it
+  if (smoother && typeof smoother.paused === 'function') {
+    smoother.paused(false);
+  }
+  
   document.getElementsByTagName("main")[0].classList.add("main-active");
   gsap.to("body", {
     backgroundColor: "#0a0e17",

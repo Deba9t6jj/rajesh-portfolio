@@ -17,17 +17,17 @@ export const LoadingContext = createContext<LoadingType | null>(null);
 
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [loading, setLoading] = useState(0);
+  const [loading, setLoadingState] = useState(0);
+
+  const setLoading = (percent: number) => {
+    setLoadingState(percent);
+  };
 
   const value = {
     isLoading,
     setIsLoading,
     setLoading,
   };
-  // Trigger re-render when loading changes
-  useEffect(() => {
-    // This effect intentionally left empty to trigger re-renders on loading change
-  }, [loading]);
 
   return (
     <LoadingContext.Provider value={value as LoadingType}>
