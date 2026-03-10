@@ -1,3 +1,5 @@
+import type * as THREE from "three";
+
 export const handleMouseMove = (
   event: MouseEvent,
   setMousePosition: (x: number, y: number) => void
