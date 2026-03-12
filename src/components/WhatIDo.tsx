@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import "./styles/WhatIDo.css";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const WhatIDo = () => {
   const containerRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -8,7 +7,15 @@ const WhatIDo = () => {
     containerRef.current[index] = el;
   };
   useEffect(() => {
-    if (ScrollTrigger.isTouch) {
+    // Check if touch device by attempting to detect touch events
+    const isTouchDevice = () => {
+      return (
+        window.matchMedia("(pointer:coarse)").matches ||
+        navigator.maxTouchPoints > 0
+      );
+    };
+
+    if (!isTouchDevice()) {
       containerRef.current.forEach((container) => {
         if (container) {
           container.classList.remove("what-noTouch");
