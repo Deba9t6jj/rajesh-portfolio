@@ -3,6 +3,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+let isInitialized = false;
+
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
   if (window.innerWidth < 900) return;
@@ -16,7 +18,6 @@ export default function setSplitText() {
   paras.forEach((para) => {
     para.classList.add("visible");
     
-    // Simple fade in animation without SplitText
     gsap.fromTo(
       para,
       { autoAlpha: 0, y: 80 },
@@ -35,7 +36,6 @@ export default function setSplitText() {
   });
   
   titles.forEach((title) => {
-    // Simple fade and scale animation without SplitText
     gsap.fromTo(
       title,
       { autoAlpha: 0, y: 80, scale: 0.9 },
@@ -54,5 +54,11 @@ export default function setSplitText() {
     );
   });
 
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
+  // Only add listener once to prevent infinite recursion
+  if (!isInitialized) {
+    isInitialized = true;
+    ScrollTrigger.addEventListener("refresh", () => {
+      setSplitText();
+    });
+  }
 }
